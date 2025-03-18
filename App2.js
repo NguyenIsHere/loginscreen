@@ -28,8 +28,14 @@ function Screen1({ navigation }) {
       <Text>Screen 1</Text>
       <TouchableOpacity
         onPress={() => navigation.navigate("screen2", { name: 1 })}
+        style={{
+          padding: 16,
+          backgroundColor: "black",
+          marginTop: 10,
+          borderRadius: 5,
+        }}
       >
-        <Text style={{ color: "black" }}>To screen 2</Text>
+        <Text style={{ color: "white" }}>To screen 2</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
