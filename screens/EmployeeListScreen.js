@@ -1,63 +1,43 @@
-import React from "react";
+import React, { useState, useEffect } from 'react'
 import {
   View,
   Text,
   FlatList,
   TouchableOpacity,
-  StyleSheet,
-} from "react-native";
+  StyleSheet
+} from 'react-native'
 
-import { useEffect, useState } from "react";
+import { useFocusEffect } from '@react-navigation/native'
 
-export default function EmployeeListScreen({ navigation }) {
-  const [data, setData] = useState([]);
-
-  //   [
-  //     {
-  //       "id": "1",
-  //       "employee_name": "John Doe",
-  //       "employee_age": 18,
-  //       "employee_salary": 999,
-  //       "profile_image": ""
-  //     },
-  //     {
-  //       "id": "2",
-  //       "employee_name": "Jane Doe",
-  //       "employee_age": 19,
-  //       "employee_salary": 1000,
-  //       "profile_image": ""
-  //     },
-  //     {
-  //       "id": "3",
-  //       "employee_name": "string",
-  //       "employee_age": 0,
-  //       "employee_salary": 0,
-  //       "profile_image": "string"
-  //     }
-  //   ]
+export default function EmployeeListScreen ({ navigation }) {
+  const [data, setData] = useState([])
 
   const getEmployees = async () => {
     try {
-      const response = await fetch("http://blackntt.net:88/api/v1/employees");
-      const json = await response.json();
-      setData(json);
+      const response = await fetch('http://blackntt.net:88/api/v1/employees')
+      const json = await response.json()
+      setData(json)
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
-  };
+  }
 
-  getEmployees();
+  useFocusEffect(
+    React.useCallback(() => {
+      getEmployees()
+    }, [])
+  )
 
   return (
     <View style={styles.container}>
       <FlatList
         data={data}
-        keyExtractor={(item) => item.id}
+        keyExtractor={item => item.id.toString()}
         renderItem={({ item, index }) => (
           <TouchableOpacity
             style={styles.item}
             onPress={() =>
-              navigation.navigate("EmployeeDetail", { employee: item })
+              navigation.navigate('EmployeeDetail', { employee: item })
             }
           >
             <Text style={styles.index}>{index + 1}</Text>
@@ -66,24 +46,38 @@ export default function EmployeeListScreen({ navigation }) {
           </TouchableOpacity>
         )}
       />
+
+      <TouchableOpacity
+        style={{
+          padding: 16,
+          backgroundColor: 'black',
+          borderRadius: 16,
+          color: 'white'
+        }}
+        onPress={() => navigation.navigate('AddEmployee')}
+      >
+        <Text style={{ color: 'white', textAlign: 'center', fontSize: 20 }}>
+          Add Employee
+        </Text>
+      </TouchableOpacity>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff", padding: 20 },
+  container: { flex: 1, backgroundColor: '#fff', padding: 20 },
   item: {
     padding: 20,
     marginVertical: 10,
-    backgroundColor: "#ddd",
+    backgroundColor: '#ddd',
     borderRadius: 10,
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
   },
-  index: { fontSize: 16, fontWeight: "bold", color: "#555" },
-  employeeName: { fontSize: 18, fontWeight: "bold" },
-  employeeAge: { fontSize: 14, color: "gray" },
-  room: { fontSize: 14, color: "#333" },
-});
+  index: { fontSize: 16, fontWeight: 'bold', color: '#555' },
+  employeeName: { fontSize: 18, fontWeight: 'bold' },
+  employeeAge: { fontSize: 14, color: 'gray' },
+  room: { fontSize: 14, color: '#333' }
+})
