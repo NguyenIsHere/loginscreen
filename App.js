@@ -1,5 +1,5 @@
-import Navigation2 from "./Navigation2";
+import Navigation from './Navigation'
 
-export default function App() {
-  return <Navigation2 />;
+export default function App () {
+  return <Navigation />
 }

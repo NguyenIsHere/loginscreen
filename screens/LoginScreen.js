@@ -3,7 +3,6 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  View,
   TouchableOpacity,
   Alert,
   SafeAreaView,
@@ -12,33 +11,17 @@ import {
   Platform
 } from 'react-native'
 
-export default function LoginScreen2 ({ navigation }) {
+export default function LoginScreen ({ navigation }) {
   const [username, setUsername] = useState('')
   const [usernameError, setUsernameError] = useState(false)
 
-  const getEmployeeById = async id => {
-    try {
-      const response = await fetch(
-        `http://blackntt.net:88/api/v1/employee/${id}`
-      )
-      const json = await response.json()
-      return json
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
   const handleLogin = async () => {
-    try {
-      const data = await getEmployeeById(username)
-      if (data && data.id == username && username != '') {
-        navigation.replace('EmployeeList')
-      } else {
-        Alert.alert('Invalid credentials')
-      }
-    } catch (error) {
-      console.error(error)
-      Alert.alert('An error occurred. Please try again.')
+    if (!username) {
+      setUsernameError(true)
+      return Alert.alert('Username is required')
+    } else if (username == 'admin') {
+      setUsernameError(false)
+      navigation.navigate('Home', { username })
     }
   }
 
@@ -53,7 +36,7 @@ export default function LoginScreen2 ({ navigation }) {
           <Text style={styles.label}>Username</Text>
           <TextInput
             style={[styles.input, usernameError && styles.errorInput]}
-            placeholder='Username'
+            placeholder='admin'
             onChangeText={setUsername}
             value={username}
           />
